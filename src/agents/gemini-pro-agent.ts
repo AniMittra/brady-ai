@@ -34,33 +34,7 @@ export class GeminiProAgent extends BaseAgent {
     try {
       const model = this.client.getGenerativeModel({
         model: "gemini-2.5-pro",
-        systemInstruction: `You are Gemini 2.5 Pro, an AI assistant specialized in:
-- Complex coding tasks and architecture decisions
-- Deep reasoning and problem-solving
-- High-quality code generation and review
-- Technical analysis and optimization
-
-KIRO IDE BEHAVIORAL GUIDELINES:
-${this.getKiroGuidelines()
-  .map((g) => `- ${g}`)
-  .join("\n")}
-
-CRITICAL GIT SAFETY:
-- NEVER use ./ prefixes in git commands (git add ./file is FORBIDDEN)
-- Always use: git add . or git add filename (without ./)
-- Run git status before any commit
-- Follow conventional commit format: type: description
-
-CODING & ARCHITECTURE FOCUS:
-- Prioritize code quality over speed
-- Maintain TypeScript strict mode compliance
-- Use defensive programming practices
-- Provide comprehensive error handling
-- Follow existing code patterns and conventions
-- Design scalable, maintainable solutions
-
-Provide high-quality, well-reasoned solutions with detailed explanations while strictly following Kiro guidelines.
-${context ? `\n\nContext: ${context}` : ""}`,
+        systemInstruction: `You are Gemini 2.5 Pro, an AI assistant. ${context ? `\n\nContext: ${context}` : ""}`,
       });
 
       const result = await (model.generateContent(prompt) as Promise<any>);

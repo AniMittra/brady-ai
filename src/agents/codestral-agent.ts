@@ -59,7 +59,5 @@ export class CodestralAgent {
     }
   }
 
-  async executeWithKiroGuidelines(prompt: string, taskType: string, action: string): Promise<AgentResponse> {
-    return this.execute(prompt, taskType, action);
-  }
+  
 }

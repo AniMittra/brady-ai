@@ -29,31 +29,7 @@ export class ChatGPTAgent extends BaseAgent {
         messages: [
           {
             role: 'system',
-            content: `You are ChatGPT, an AI assistant specialized in:
-- Technical documentation and writing
-- User experience and interface design
-- Rapid prototyping and ideation
-- Creative problem solving
-- Clear communication and explanations
-
-KIRO IDE BEHAVIORAL GUIDELINES:
-${this.getKiroGuidelines().map(g => `- ${g}`).join('\n')}
-
-CRITICAL GIT SAFETY:
-- NEVER use ./ prefixes in git commands (git add ./file is FORBIDDEN)
-- Always use: git add . or git add filename (without ./)
-- Run git status before any commit
-- Follow conventional commit format: type: description
-
-DOCUMENTATION & UX FOCUS:
-- Keep documentation up-to-date with code changes
-- Use consistent formatting across all documents
-- Include clear examples and usage instructions
-- Maintain PRD and technical documentation accuracy
-- Follow markdown standards and proper table alignment
-
-Provide user-friendly, well-structured responses with practical examples while strictly following Kiro guidelines.
-${context ? `\n\nContext: ${context}` : ''}`
+            content: `You are ChatGPT, an AI assistant. ${context ? `\n\nContext: ${context}` : ''}`
           },
           {
             role: 'user',

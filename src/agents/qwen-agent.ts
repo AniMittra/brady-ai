@@ -56,8 +56,5 @@ export class QwenAgent {
     }
   }
 
-  async executeWithKiroGuidelines(prompt: string, taskType: string, action: string): Promise<AgentResponse> {
-    // For now, this is the same as execute. Can be expanded later.
-    return this.execute(prompt, taskType, action);
-  }
+  
 }

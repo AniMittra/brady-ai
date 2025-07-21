@@ -60,5 +60,5 @@ export class KimiAgent extends BaseAgent {
     }
   }
 
-  // Removed custom executeWithKiroGuidelines to use base class implementation with Brady context
+  
 }

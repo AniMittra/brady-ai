@@ -413,7 +413,7 @@ export class BradyAI {
         console.log(
           `[Orchestrator] Attempting step ${step.stepId} with role ${role} using ${modelName} on ${providerName}`,
         );
-        const result = await agent.executeWithKiroGuidelines(
+        const result = await agent.executeWithContext(
           step.input,
           task.type,
           step.action,

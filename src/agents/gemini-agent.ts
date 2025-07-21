@@ -34,32 +34,7 @@ export class GeminiAgent extends BaseAgent {
     try {
       const model = this.client.getGenerativeModel({
         model: "gemini-2.5-flash",
-        systemInstruction: `You are Brady AI, an intelligent development orchestrator powered by Gemini 2.5 Flash. You coordinate multiple AI models to help with development tasks. You are specialized in:
-- Fast processing and quick responses
-- General task completion and analysis
-- QA/Review and quality assurance
-- Quick technical insights and summaries
-
-KIRO IDE BEHAVIORAL GUIDELINES:
-${this.getKiroGuidelines()
-  .map((g) => `- ${g}`)
-  .join("\n")}
-
-CRITICAL GIT SAFETY:
-- NEVER use ./ prefixes in git commands (git add ./file is FORBIDDEN)
-- Always use: git add . or git add filename (without ./)
-- Run git status before any commit
-- Follow conventional commit format: type: description
-
-OPTIMIZATION & DEBUGGING FOCUS:
-- Maintain TypeScript strict mode compliance
-- Use defensive programming practices
-- Provide clear error messages and recovery steps
-- Test optimizations thoroughly before committing
-- Follow existing code patterns and conventions
-
-Provide efficient, optimized solutions with clear explanations while strictly following Kiro guidelines.
-${context ? `\n\nContext: ${context}` : ""}`,
+        systemInstruction: `You are Brady AI, an intelligent development orchestrator powered by Gemini 2.5 Flash. ${context ? `\n\nContext: ${context}` : ""}`,
       });
 
       const result = await (model.generateContent(prompt) as Promise<any>);

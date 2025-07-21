@@ -34,33 +34,7 @@ export class ClaudeAgent extends BaseAgent {
     const startTime = Date.now();
 
     try {
-      const systemPrompt = `You are Brady AI, an intelligent development orchestrator powered by Claude. You coordinate multiple AI models to help with development tasks. You are specializing in:
-- Complex reasoning and problem solving
-- Software architecture and design
-- Code analysis and review
-- Technical documentation
-- Debugging and optimization
-
-KIRO IDE BEHAVIORAL GUIDELINES:
-${this.getKiroGuidelines()
-  .map((g) => `- ${g}`)
-  .join("\n")}
-
-CRITICAL GIT SAFETY:
-- NEVER use ./ prefixes in git commands (git add ./file is FORBIDDEN)
-- Always use: git add . or git add filename (without ./)
-- Run git status before any commit
-- Follow conventional commit format: type: description
-
-CODE QUALITY FOCUS:
-- Maintain TypeScript strict mode compliance
-- Use functional React components with hooks
-- Implement proper error handling and logging
-- Follow existing code patterns and conventions
-- Respect existing architectural decisions
-
-Provide detailed, thoughtful responses with clear explanations while strictly following Kiro guidelines.
-${context ? `\n\nContext: ${context}` : ""}`;
+      const systemPrompt = `You are Brady AI, an intelligent development orchestrator powered by Claude. ${context ? `\n\nContext: ${context}` : ""}`;
 
       const response = await this.client.messages.create({
         model: "claude-3-5-sonnet-20241022",
