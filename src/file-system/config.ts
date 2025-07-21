@@ -10,7 +10,7 @@ export const DEFAULT_FILE_SYSTEM_CONFIG: FileSystemConfig = {
       "src/",
       "docs/",
       "tests/",
-      ".kiro/specs/",
+      
       "mcp-orchestrator/src/",
     ],
     forbiddenPaths: [

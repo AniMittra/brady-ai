@@ -115,12 +115,6 @@ else
   done
 fi
 
-# Add Brady's own context (for understanding Brady's capabilities)
-BRADY_DIR=$(dirname "$(readlink -f "$0")")
-if [ -f "$BRADY_DIR/../config/project-guidelines.md" ]; then
-  AIDER_CMD+=(--read "$BRADY_DIR/../config/project-guidelines.md")
-  echo "  ✅ Brady guidelines"
-fi
 
 echo ""
 echo "🚀 Starting Aider with Brady AI..."
