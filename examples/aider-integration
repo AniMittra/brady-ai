@@ -1,0 +1,133 @@
+#!/bin/bash
+
+# Brady CLI - Terminal AI coding assistant using Brady + Aider
+# Usage: brady-cli [--project PROJECT_DIR] [aider options]
+
+# Default to current directory for project context
+PROJECT_DIR="."
+BRADY_HEALTH_URL="http://localhost:3002/health"
+
+# Parse arguments
+AIDER_ARGS=()
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --project)
+      PROJECT_DIR="$2"
+      shift 2
+      ;;
+    *)
+      AIDER_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+# Check if Brady is running
+if ! curl -s $BRADY_HEALTH_URL > /dev/null; then
+  echo "🚨 Brady API is not running. Starting it now..."
+  
+  # Look for Brady in common locations
+  BRADY_LOCATIONS=(
+    "."
+    "../brady-ai"
+    "~/Dev/brady-ai"
+    "./brady-ai"
+  )
+  
+  BRADY_STARTED=false
+  for dir in "${BRADY_LOCATIONS[@]}"; do
+    if [ -d "$dir" ] && [ -f "$dir/package.json" ] && grep -q '"brady"' "$dir/package.json"; then
+      echo "📁 Found Brady at $dir, starting..."
+      (cd "$dir" && npm run brady) &
+      BRADY_STARTED=true
+      break
+    fi
+  done
+  
+  if [ "$BRADY_STARTED" = false ]; then
+    echo "❌ Could not find Brady. Please ensure brady-ai is available and run 'npm run brady'"
+    exit 1
+  fi
+  
+  echo "⏳ Waiting for Brady to start..."
+  sleep 5
+  
+  # Check again
+  if ! curl -s $BRADY_HEALTH_URL > /dev/null; then
+    echo "❌ Brady failed to start"
+    exit 1
+  fi
+fi
+
+echo "✅ Connected to Brady API"
+
+# Build aider command
+AIDER_CMD=(
+  aider
+  --openai-api-base http://localhost:3002/v1
+  --openai-api-key brady-local
+  --model openai/brady-director
+  --no-show-model-warnings
+  --stream
+  --pretty
+)
+
+# Load project context using brady.md discovery
+echo "📋 Loading project context from: $PROJECT_DIR"
+
+# Check for brady.md in project directory
+if [ -f "$PROJECT_DIR/brady.md" ]; then
+  echo "  ✅ Found brady.md - using project-specific context"
+  AIDER_CMD+=(--read "$PROJECT_DIR/brady.md")
+  
+  # Parse brady.md to find additional context files
+  if command -v grep >/dev/null 2>&1; then
+    # Extract file paths from brady.md (look for `file.ext` or - file.ext patterns)
+    CONTEXT_FILES=$(grep -E '`[^`]+\.(md|ts|js|json|py|txt)`|^- [^-].*\.(md|ts|js|json|py|txt)' "$PROJECT_DIR/brady.md" | \
+                   sed -E 's/.*`([^`]+)`.*|^- (.+)$/\1\2/' | \
+                   grep -v '^$')
+    
+    while IFS= read -r file; do
+      if [ -n "$file" ] && [ -f "$PROJECT_DIR/$file" ]; then
+        AIDER_CMD+=(--read "$PROJECT_DIR/$file")
+        echo "  ✅ $file"
+      elif [ -n "$file" ]; then
+        echo "  ⚠️  $file (not found)"
+      fi
+    done <<< "$CONTEXT_FILES"
+  fi
+else
+  echo "  ℹ️  No brady.md found - using default context discovery"
+  
+  # Fallback: look for common project files
+  DEFAULT_FILES=(
+    "README.md"
+    "package.json"
+    "docs/README.md"
+    ".github/README.md"
+  )
+  
+  for file in "${DEFAULT_FILES[@]}"; do
+    if [ -f "$PROJECT_DIR/$file" ]; then
+      AIDER_CMD+=(--read "$PROJECT_DIR/$file")
+      echo "  ✅ $file"
+    fi
+  done
+fi
+
+# Add Brady's own context (for understanding Brady's capabilities)
+BRADY_DIR=$(dirname "$(readlink -f "$0")")
+if [ -f "$BRADY_DIR/../config/project-guidelines.md" ]; then
+  AIDER_CMD+=(--read "$BRADY_DIR/../config/project-guidelines.md")
+  echo "  ✅ Brady guidelines"
+fi
+
+echo ""
+echo "🚀 Starting Aider with Brady AI..."
+echo "   Project: $PROJECT_DIR"
+echo "   Context files loaded: $(( ${#AIDER_CMD[@]} - 7 ))"
+echo ""
+
+# Add remaining arguments and run
+AIDER_CMD+=("${AIDER_ARGS[@]}")
+"${AIDER_CMD[@]}"

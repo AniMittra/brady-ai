@@ -1,0 +1,109 @@
+{
+  "roles": {
+    "director": {
+      "providers": [
+        {
+          "name": "portkey",
+          "models": ["moonshotai/kimi-k2"],
+          "priority": 1
+        },
+        {
+          "name": "groq",
+          "models": ["llama-3.3-70b-versatile"],
+          "priority": 2
+        },
+        {
+          "name": "openrouter",
+          "models": ["moonshotai/kimi-k2"],
+          "priority": 2
+        },
+        {
+          "name": "groq",
+          "models": ["qwen/qwen3-32b"],
+          "priority": 3
+        },
+        {
+          "name": "openrouter",
+          "models": ["meta-llama/llama-3.3-70b-instruct"],
+          "priority": 4
+        },
+        {
+          "name": "gemini",
+          "models": ["gemini-2.5-pro"],
+          "priority": 5
+        }
+      ]
+    },
+    "researcher": {
+      "providers": [
+        {
+          "name": "perplexity",
+          "models": ["perplexity-sonar"],
+          "priority": 1
+        },
+        {
+          "name": "portkey",
+          "models": ["meta-llama/llama-3.3-70b-instruct"],
+          "priority": 2
+        },
+        {
+          "name": "groq",
+          "models": ["llama-3.3-70b-versatile"],
+          "priority": 3
+        },
+        {
+          "name": "groq",
+          "models": ["qwen/qwen3-32b"],
+          "priority": 4
+        }
+      ]
+    },
+    "coder": {
+      "providers": [
+        {
+          "name": "groq",
+          "models": ["llama-3.3-70b-versatile"],
+          "priority": 1
+        },
+        {
+          "name": "openrouter",
+          "models": ["moonshotai/kimi-k2"],
+          "priority": 2
+        },
+        {
+          "name": "groq",
+          "models": ["qwen/qwen3-32b"],
+          "priority": 3
+        },
+        {
+          "name": "openrouter",
+          "models": ["codestral/codestral-latest"],
+          "priority": 4
+        },
+        {
+          "name": "openrouter",
+          "models": ["meta-llama/llama-3.3-70b-instruct"],
+          "priority": 5
+        }
+      ]
+    }
+  },
+  "rateLimits": {
+    "groq": {
+      "requestsPerMinute": 10,
+      "cooldownSeconds": 90
+    },
+    "gemini": {
+      "requestsPerMinute": 2,
+      "cooldownSeconds": 60
+    },
+    "openrouter": {
+      "requestsPerMinute": 15,
+      "cooldownSeconds": 60
+    },
+    "portkey": {
+      "requestsPerMinute": 20,
+      "cooldownSeconds": 30
+    }
+  }
+}
