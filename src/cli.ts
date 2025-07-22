@@ -87,10 +87,10 @@ async function startBradyServer(): Promise<void> {
 
 async function main() {
   // Check if Brady is already running
-  if (!(await checkBradyHealth())) {
-    await startBradyServer();
+  if (await checkBradyHealth()) {
+    console.log('✅ Connected to existing Brady API');
   } else {
-    console.log('✅ Connected to Brady API');
+    await startBradyServer();
   }
 
   // Parse arguments
