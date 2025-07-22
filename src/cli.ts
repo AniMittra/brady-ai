@@ -4,6 +4,10 @@ import { spawn, exec } from 'child_process';
 import { promisify } from 'util';
 import * as path from 'path';
 import * as fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const execAsync = promisify(exec);
 
@@ -56,6 +60,7 @@ async function startBradyServer(): Promise<void> {
   }
 
   console.log(`📁 Found Brady at ${bradyDir}, starting server...`);
+  console.log('🔧 Starting Brady server in background...');
   
   // Start Brady server in the background
   const bradyProcess = spawn('npm', ['run', 'brady'], {
@@ -70,10 +75,11 @@ async function startBradyServer(): Promise<void> {
   // Wait for server to be ready
   console.log('⏳ Waiting for Brady to start...');
   let attempts = 0;
-  const maxAttempts = 30; // 30 seconds max wait
+  const maxAttempts = 15; // Reduced to 15 seconds
 
   while (attempts < maxAttempts) {
     await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log(`⏳ Attempt ${attempts + 1}/${maxAttempts}...`);
     if (await checkBradyHealth()) {
       console.log('✅ Connected to Brady API');
       return;
@@ -118,6 +124,9 @@ async function main() {
   ];
 
   // Execute aider
+  console.log('🚀 Launching aider with Brady...');
+  console.log('📝 Command:', aiderCmd.join(' '));
+  
   const aiderProcess = spawn(aiderCmd[0], aiderCmd.slice(1), {
     stdio: 'inherit',
     cwd: process.cwd()
