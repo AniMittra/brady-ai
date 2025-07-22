@@ -137,9 +137,8 @@ async function main() {
   });
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch((error) => {
-    console.error('❌ Brady CLI error:', error);
-    process.exit(1);
-  });
-}
+// Always run main when this file is executed directly
+main().catch((error) => {
+  console.error('❌ Brady CLI error:', error);
+  process.exit(1);
+});
