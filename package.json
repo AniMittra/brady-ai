@@ -4,13 +4,17 @@
   "description": "Multi-provider AI gateway with intelligent routing and cost optimization",
   "type": "module",
   "main": "dist/openai-api-server.js",
+  "bin": {
+    "brady-cli": "./dist/cli.js"
+  },
   "scripts": {
     "build": "tsc",
     "brady": "npm run build && node dist/openai-api-server.js",
     "brady:server": "npm run build && node dist/http-server.js",
     "dev": "tsx src/openai-api-server.ts",
     "test": "tsx src/test.ts",
-    "cli": "tsx src/cli.ts"
+    "cli": "tsx src/cli.ts",
+    "install-cli": "npm run build && npm link"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
