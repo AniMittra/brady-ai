@@ -523,9 +523,9 @@ export class BradyAI {
           {
             stepId: "1",
             agent: "coder",
-            action: "Complete task with Kiro guidelines",
-            input: `Task: ${task.description}. Follow Kiro guidelines.`,
-            expectedOutput: "Task completion following Kiro standards",
+            action: "Complete task",
+            input: `Task: ${task.description}`,
+            expectedOutput: "Task completion",
           },
         ],
         estimatedCost: 0.01,
@@ -539,7 +539,10 @@ export class BradyAI {
     task: Task,
     results: AgentResponse[],
   ): Promise<AgentResponse> {
-    const summaryPrompt = `Summarize the results of this task following Kiro documentation standards:\n    \nTask: ${task.description}\nResults: ${results.map((r, i) => `Step ${i + 1} (${r.metadata.model}): ${r.result.substring(0, 200)}...`).join("\n")}\n\nProvide a concise summary of what was accomplished.`;
+    const summaryPrompt = `Summarize the results of this task:
+    
+Task: ${task.description}
+Results: ${results.map((r, i) => `Step ${i + 1} (${r.metadata.model}): ${r.result.substring(0, 200)}...`).join("\n")}\n\nProvide a concise summary of what was accomplished.`;
 
     const summaryStep: OrchestrationStep = {
       stepId: "final-summary",

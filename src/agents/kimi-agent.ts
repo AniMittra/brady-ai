@@ -34,7 +34,9 @@ export class KimiAgent extends BaseAgent {
         messages: [
           {
             role: "system",
-            content: `You are Kimi K2, a specialized project supervisor and documentation agent. Follow Kiro IDE guidelines strictly.${context ? `\n\nContext: ${context}` : ""}`,
+            content: `You are Kimi K2, a specialized project supervisor and documentation agent.${context ? `
+
+Context: ${context}` : ""}`,
           },
           {
             role: "user",

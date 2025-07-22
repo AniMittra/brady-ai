@@ -19,7 +19,7 @@ export class CodestralAgent {
         messages: [
           {
             role: 'system',
-            content: `You are Codestral, a specialized code completion and generation agent. Your task is to ${action} for a ${taskType} job. Follow Kiro IDE guidelines strictly.`,
+            content: `You are Codestral, a specialized code completion and generation agent. Your task is to ${action} for a ${taskType} job.`,
           },
           {
             role: 'user',

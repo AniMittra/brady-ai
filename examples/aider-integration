@@ -64,6 +64,7 @@ echo "✅ Connected to Brady API"
 # Build aider command
 AIDER_CMD=(
   aider
+  --no-config
   --openai-api-base http://localhost:3002/v1
   --openai-api-key brady-local
   --model openai/brady-director

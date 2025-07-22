@@ -15,7 +15,7 @@ export class QwenAgent {
         messages: [
           {
             role: 'system',
-            content: `You are Qwen 2.5 Coder, a specialized coding agent. Your task is to ${action} for a ${taskType} job. Follow Kiro IDE guidelines strictly.`,
+            content: `You are Qwen 2.5 Coder, a specialized coding agent. Your task is to ${action} for a ${taskType} job.`,
           },
           {
             role: 'user',
