@@ -77,9 +77,9 @@ export class VisionAnalyzer {
       const prompt = request.prompt || "Analyze this image and describe what you see in detail.";
 
       let result;
-      const agent = request.agent || 'gpt-4o'; // Default to GPT-4o for vision
+      const agentType: string = request.agent || 'gpt-4o'; // Default to GPT-4o for vision
 
-      switch (agent) {
+      switch (agentType) {
         case 'gpt-4o':
           result = await this.analyzeWithGPT4o(prompt, base64Image, mimeType, request.detail);
           break;
@@ -90,7 +90,7 @@ export class VisionAnalyzer {
           result = await this.analyzeWithPortkey(prompt, base64Image, mimeType);
           break;
         default:
-          throw new Error(`Unsupported agent: ${agent}`);
+          throw new Error(`Unsupported agent: ${agentType}`);
       }
 
       const duration = Date.now() - startTime;
@@ -101,7 +101,7 @@ export class VisionAnalyzer {
         metadata: {
           imagePath: request.imagePath,
           imageSize: imageStats.size,
-          agent: agent as string,
+          agent: agentType,
           tokensUsed: result.metadata?.tokensUsed || 0,
           cost: result.metadata?.cost || 0,
           duration: duration,

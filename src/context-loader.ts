@@ -171,7 +171,7 @@ export class ContextLoader {
   async discoverMCPServers(): Promise<MCPServer[]> {
     const servers: MCPServer[] = [];
     
-    // 1. Check Warp MCP config
+    // 1. Check Warp MCP config (local)
     try {
       const warpConfig = path.join(this.workingDirectory, 'warp-mcp-config.json');
       if (fs.existsSync(warpConfig)) {
@@ -187,11 +187,69 @@ export class ContextLoader {
               env: mcpConfig.env,
             });
           }
-          console.log(`[ContextLoader] Found ${Object.keys(content.mcpServers).length} MCP servers in Warp config`);
+          console.log(`[ContextLoader] Found ${Object.keys(content.mcpServers).length} MCP servers in local Warp config`);
         }
       }
     } catch (error) {
-      console.warn('[ContextLoader] Error reading Warp MCP config:', error);
+      console.warn('[ContextLoader] Error reading local Warp MCP config:', error);
+    }
+
+    // 1b. Check Warp's actual config locations and running processes
+    try {
+      const warpConfigPaths = [
+        path.join(require('os').homedir(), 'Library/Application Support/dev.warp.Warp-Stable/mcp'),
+        path.join(require('os').homedir(), 'Library/Application Support/dev.warp.Warp/mcp'),
+        path.join(require('os').homedir(), 'Library/Application Support/Kiro/User/globalStorage/kiro.kiroagent'),
+      ];
+      
+      for (const configPath of warpConfigPaths) {
+        if (fs.existsSync(configPath)) {
+          const files = fs.readdirSync(configPath);
+          const configFiles = files.filter(f => f.endsWith('.json') && !f.endsWith('.log'));
+          
+          for (const configFile of configFiles) {
+            try {
+              const fullPath = path.join(configPath, configFile);
+              const content = JSON.parse(fs.readFileSync(fullPath, 'utf-8'));
+              if (content.mcpServers) {
+                for (const [name, config] of Object.entries(content.mcpServers as any)) {
+                  const mcpConfig = config as any;
+                  // Avoid duplicates
+                  if (!servers.find(s => s.name === name)) {
+                    servers.push({
+                      name,
+                      command: mcpConfig.command,
+                      args: mcpConfig.args,
+                      working_directory: mcpConfig.working_directory,
+                      env: mcpConfig.env,
+                    });
+                  }
+                }
+                console.log(`[ContextLoader] Found additional MCP servers in ${configFile}`);
+              }
+            } catch (error) {
+              // Skip invalid config files
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('[ContextLoader] Error scanning Warp config directories:', error);
+    }
+
+    // 1c. Scan for running MCP processes (HTTP endpoints)
+    try {
+      const runningMCPs = await this.scanForRunningMCPs();
+      for (const mcp of runningMCPs) {
+        if (!servers.find(s => s.name === mcp.name)) {
+          servers.push(mcp);
+        }
+      }
+      if (runningMCPs.length > 0) {
+        console.log(`[ContextLoader] Found ${runningMCPs.length} running MCP processes`);
+      }
+    } catch (error) {
+      console.warn('[ContextLoader] Error scanning for running MCPs:', error);
     }
 
     // 2. Check generic MCP configs
@@ -234,6 +292,41 @@ export class ContextLoader {
     });
 
     return servers;
+  }
+
+  /**
+   * Scan for running MCP processes on common ports
+   */
+  private async scanForRunningMCPs(): Promise<MCPServer[]> {
+    const runningServers: MCPServer[] = [];
+    const commonPorts = [3000, 3001, 3434, 8000, 8080, 9000];
+    
+    for (const port of commonPorts) {
+      try {
+        // Try to detect MCP servers by making a simple request
+        const { default: fetch } = await import('node-fetch');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1000);
+        
+        const response = await fetch(`http://localhost:${port}/health`, { 
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+          runningServers.push({
+            name: `mcp-port-${port}`,
+            endpoint: `http://localhost:${port}`,
+            command: undefined,
+          });
+        }
+      } catch (error) {
+        // Port not responding or not MCP - continue
+      }
+    }
+    
+    return runningServers;
   }
 
   /**
