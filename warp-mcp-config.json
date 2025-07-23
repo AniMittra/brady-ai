@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "bradyai": {
+      "command": "node",
+      "args": ["dist/mcp-server.js"],
+      "working_directory": ".",
+      "start_on_launch": true,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "brave": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "start_on_launch": true,
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
+    }
+  }
+}
