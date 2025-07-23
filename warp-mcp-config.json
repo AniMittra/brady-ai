@@ -16,6 +16,34 @@
       "env": {
         "BRAVE_API_KEY": "${BRAVE_API_KEY}"
       }
+    },
+    "vision-gemini": {
+      "command": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+      "args": ["-m", "image_recognition_server.server"],
+      "working_directory": "/Users/animittra/Dev/brady-ai/tmp_rovodev_vision_mcp",
+      "start_on_launch": true,
+      "env": {
+        "VISION_PROVIDER": "openai",
+        "OPENAI_API_KEY": "${GOOGLE_API_KEY}",
+        "OPENAI_BASE_URL": "https://generativelanguage.googleapis.com/v1beta",
+        "OPENAI_MODEL": "gemini-2.0-flash-exp",
+        "LOG_LEVEL": "INFO",
+        "ENABLE_OCR": "false"
+      }
+    },
+    "vision-portkey": {
+      "command": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+      "args": ["-m", "image_recognition_server.server"],
+      "working_directory": "/Users/animittra/Dev/brady-ai/tmp_rovodev_vision_mcp",
+      "start_on_launch": false,
+      "env": {
+        "VISION_PROVIDER": "openai",
+        "OPENAI_API_KEY": "${PORTKEY_API_KEY}",
+        "OPENAI_BASE_URL": "https://api.portkey.ai/v1",
+        "OPENAI_MODEL": "gpt-4o",
+        "LOG_LEVEL": "INFO",
+        "ENABLE_OCR": "false"
+      }
     }
   }
 }
