@@ -1,0 +1,184 @@
+{
+  "discovered_at": "2025-07-23T20:47:34.592Z",
+  "total_servers": 13,
+  "capabilities": {
+    "orchestration": [
+      "bradyai"
+    ],
+    "ai_coordination": [
+      "bradyai"
+    ],
+    "task_management": [
+      "bradyai"
+    ],
+    "web_search": [
+      "brave"
+    ],
+    "news": [
+      "brave",
+      "perplexity-ask"
+    ],
+    "research": [
+      "brave",
+      "perplexity-ask"
+    ],
+    "image_analysis": [
+      "vision-gemini",
+      "vision-portkey"
+    ],
+    "vision": [
+      "vision-gemini",
+      "vision-portkey"
+    ],
+    "ocr": [
+      "vision-gemini"
+    ],
+    "premium": [
+      "vision-portkey"
+    ],
+    "documentation": [
+      "aws-docs"
+    ],
+    "aws": [
+      "aws-docs"
+    ],
+    "cloud": [
+      "aws-docs"
+    ],
+    "database": [
+      "convex-helper"
+    ],
+    "storage": [
+      "convex-helper"
+    ],
+    "queries": [
+      "convex-helper"
+    ],
+    "http": [
+      "fetch"
+    ],
+    "api": [
+      "fetch"
+    ],
+    "requests": [
+      "fetch"
+    ],
+    "web_scraping": [
+      "firecrawl"
+    ],
+    "content_extraction": [
+      "firecrawl"
+    ],
+    "crawling": [
+      "firecrawl"
+    ],
+    "ai_search": [
+      "perplexity-ask"
+    ],
+    "current_events": [
+      "perplexity-ask"
+    ],
+    "browser_automation": [
+      "playwright"
+    ],
+    "testing": [
+      "playwright"
+    ],
+    "screenshots": [
+      "playwright"
+    ],
+    "ui_interaction": [
+      "playwright"
+    ],
+    "ui_components": [
+      "shadcn-ui-jpisnice"
+    ],
+    "react": [
+      "shadcn-ui-jpisnice"
+    ],
+    "frontend": [
+      "shadcn-ui-jpisnice"
+    ],
+    "ui_generation": [
+      "shadcn-ui-heilgar"
+    ],
+    "components": [
+      "shadcn-ui-heilgar"
+    ],
+    "design": [
+      "shadcn-ui-heilgar"
+    ],
+    "mcp_management": [
+      "mcp-installer"
+    ],
+    "installation": [
+      "mcp-installer"
+    ]
+  },
+  "tools": {
+    "execute_dev_task": "bradyai",
+    "ask_director": "bradyai",
+    "get_agent_status": "bradyai",
+    "brave_web_search": "brave",
+    "describe_image": "vision-portkey",
+    "describe_image_from_file": "vision-portkey",
+    "search_aws_docs": "aws-docs",
+    "get_service_info": "aws-docs",
+    "query_database": "convex-helper",
+    "update_records": "convex-helper",
+    "http_get": "fetch",
+    "http_post": "fetch",
+    "fetch_url": "fetch",
+    "scrape_url": "firecrawl",
+    "crawl_website": "firecrawl",
+    "extract_content": "firecrawl",
+    "perplexity_search": "perplexity-ask",
+    "ask_perplexity": "perplexity-ask",
+    "take_screenshot": "playwright",
+    "navigate_page": "playwright",
+    "click_element": "playwright",
+    "fill_form": "playwright",
+    "generate_component": "shadcn-ui-jpisnice",
+    "list_components": "shadcn-ui-jpisnice",
+    "create_ui_component": "shadcn-ui-heilgar",
+    "get_component_code": "shadcn-ui-heilgar",
+    "install_mcp": "mcp-installer",
+    "list_available_mcps": "mcp-installer"
+  },
+  "smart_routing": {
+    "news|current events|today": [
+      "perplexity-ask",
+      "brave"
+    ],
+    "web search|research": [
+      "brave",
+      "perplexity-ask"
+    ],
+    "scrape|crawl|extract": [
+      "firecrawl"
+    ],
+    "image|photo|screenshot|analyze": [
+      "vision-gemini",
+      "vision-portkey"
+    ],
+    "ui|component|react": [
+      "shadcn-ui-jpisnice",
+      "shadcn-ui-heilgar"
+    ],
+    "test|browser|automation": [
+      "playwright"
+    ],
+    "database|query|data": [
+      "convex-helper"
+    ],
+    "api|http|fetch": [
+      "fetch"
+    ],
+    "aws|cloud|documentation": [
+      "aws-docs"
+    ],
+    "orchestrate|complex task": [
+      "bradyai"
+    ]
+  }
+}
