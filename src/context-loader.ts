@@ -3,7 +3,7 @@ import * as path from 'path';
 
 export interface MCPServer {
   name: string;
-  command: string;
+  command?: string;
   args?: string[];
   working_directory?: string;
   env?: Record<string, string>;
@@ -178,12 +178,13 @@ export class ContextLoader {
         const content = JSON.parse(fs.readFileSync(warpConfig, 'utf-8'));
         if (content.mcpServers) {
           for (const [name, config] of Object.entries(content.mcpServers as any)) {
+            const mcpConfig = config as any;
             servers.push({
               name,
-              command: config.command,
-              args: config.args,
-              working_directory: config.working_directory,
-              env: config.env,
+              command: mcpConfig.command,
+              args: mcpConfig.args,
+              working_directory: mcpConfig.working_directory,
+              env: mcpConfig.env,
             });
           }
           console.log(`[ContextLoader] Found ${Object.keys(content.mcpServers).length} MCP servers in Warp config`);
@@ -202,13 +203,14 @@ export class ContextLoader {
           const content = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
           if (content.servers) {
             for (const [name, config] of Object.entries(content.servers as any)) {
+              const mcpConfig = config as any;
               servers.push({
                 name,
-                endpoint: config.endpoint,
-                command: config.command,
-                args: config.args,
-                working_directory: config.working_directory,
-                env: config.env,
+                endpoint: mcpConfig.endpoint,
+                command: mcpConfig.command,
+                args: mcpConfig.args,
+                working_directory: mcpConfig.working_directory,
+                env: mcpConfig.env,
               });
             }
             console.log(`[ContextLoader] Found MCP servers in ${configFile}`);
@@ -226,6 +228,7 @@ export class ContextLoader {
         servers.push({
           name: `env-mcp-${index}`,
           endpoint: endpoint.trim(),
+          command: undefined,
         });
       }
     });

@@ -101,7 +101,7 @@ export class VisionAnalyzer {
         metadata: {
           imagePath: request.imagePath,
           imageSize: imageStats.size,
-          agent: agent,
+          agent: agent as string,
           tokensUsed: result.metadata?.tokensUsed || 0,
           cost: result.metadata?.cost || 0,
           duration: duration,
