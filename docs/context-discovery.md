@@ -40,9 +40,31 @@ For this project, prefer:
 - Write tests for all new features
 ```
 
+## MCP Tool Discovery
+
+**CRITICAL**: Brady should ALWAYS start by discovering available MCP tools:
+
+### Discovery Process
+1. **Check for MCP config**: Look for `warp-mcp-config.json` 
+2. **Query each server**: Send `tools/list` to discover capabilities
+3. **Cache tool schemas**: Store for session use
+
+### Expected MCP Tools
+- **Vision**: `describe_image`, `describe_image_from_file` (image analysis)
+- **Search**: `brave_web_search` (web research) 
+- **Files**: `read_file`, `write_file`, `list_directory`
+- **Dev**: `execute_command`, `git_operations`
+- **Brady**: `orchestrate_task`, `get_task_status`
+
+### Tool Priority
+1. MCP tools (external, often more capable)
+2. Built-in agent capabilities  
+3. Manual implementation (last resort)
+
 ## How it works:
-1. Brady looks for `brady.md` in current working directory
-2. Parses the "Context Files" section
-3. Loads all referenced files
-4. Uses project-specific model preferences
-5. Applies project-specific instructions
+1. **MCP Discovery**: Query available MCP tools first
+2. Brady looks for `brady.md` in current working directory
+3. Parses the "Context Files" section
+4. Loads all referenced files
+5. Uses project-specific model preferences
+6. Applies project-specific instructions

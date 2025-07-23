@@ -30,6 +30,23 @@ Brady Gateway
 └── Configuration System (model priorities, routing rules)
 ```
 
+## 🔧 MCP Integration
+
+Brady should automatically discover and use MCP tools:
+
+### Startup Process
+1. **MCP Discovery**: Check `warp-mcp-config.json` for available servers
+2. **Tool Enumeration**: Query each server with `tools/list`
+3. **Capability Mapping**: Cache tool schemas and parameters
+
+### Available MCP Servers
+- **vision-gemini**: FREE image analysis (Gemini 2.0 Flash)
+- **brave**: FREE web search
+- **bradyai**: Task orchestration and agent coordination
+
+### Integration Priority
+Always prefer MCP tools over built-in alternatives when available.
+
 ## ✅ Development Guidelines
 
 - **Commit format**: `feat|fix|docs: short description`
