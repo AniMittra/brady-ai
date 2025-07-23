@@ -1,0 +1,8 @@
+{
+  "brave-search": {
+    "command": "brave-search-mcp",
+    "env": {
+      "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+    }
+  }
+}
