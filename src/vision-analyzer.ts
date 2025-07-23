@@ -97,11 +97,11 @@ export class VisionAnalyzer {
 
       return {
         success: true,
-        analysis: result.result,
+        analysis: String(result.result || ''),
         metadata: {
           imagePath: request.imagePath,
           imageSize: imageStats.size,
-          agent: agentType,
+          agent: String(agentType),
           tokensUsed: result.metadata?.tokensUsed || 0,
           cost: result.metadata?.cost || 0,
           duration: duration,
