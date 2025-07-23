@@ -16,6 +16,7 @@ import { QwenAgent } from "./agents/qwen-agent.js";
 import { CodestralAgent } from "./agents/codestral-agent.js";
 import { LlamaAgent } from "./agents/llama-agent.js";
 import { PortkeyAgent } from "./agents/portkey-agent.js";
+import { ContextLoader, ProjectContext } from "./context-loader.js";
 
 export interface APIKeys {
   groq?: string;
@@ -150,6 +151,8 @@ export class BradyAI {
   private modelConfig!: ModelPriorityConfig;
   private apiKeys: APIKeys;
   private rateLimiter!: RateLimiter;
+  private contextLoader: ContextLoader;
+  private projectContext: ProjectContext | null = null;
   private currentTaskProgress: {
     taskId: string;
     totalSteps: number;
@@ -159,8 +162,31 @@ export class BradyAI {
 
   constructor(apiKeys: APIKeys) {
     this.apiKeys = apiKeys;
+    this.contextLoader = new ContextLoader();
     this.loadConfig();
     this.initializeAgents();
+    this.loadProjectContext();
+  }
+
+  private async loadProjectContext() {
+    try {
+      console.log('[BradyAI] Loading project context and discovering MCP tools...');
+      this.projectContext = await this.contextLoader.loadProjectContext();
+      
+      if (this.projectContext) {
+        console.log(`[BradyAI] Context loaded: ${this.projectContext.mcpServers.length} MCP servers, ${this.projectContext.availableTools.length} tools`);
+        if (this.projectContext.availableTools.length > 0) {
+          console.log(`[BradyAI] Available MCP tools: ${this.projectContext.availableTools.join(', ')}`);
+        }
+        if (this.projectContext.overview !== 'No project context file found. Working in generic mode.') {
+          console.log(`[BradyAI] Project: ${this.projectContext.overview.substring(0, 100)}...`);
+        }
+      } else {
+        console.log('[BradyAI] No project context found, working in generic mode');
+      }
+    } catch (error) {
+      console.error('[BradyAI] Error loading project context:', error);
+    }
   }
 
   private loadConfig() {
@@ -634,11 +660,19 @@ Results: ${results.map((r, i) => `Step ${i + 1} (${r.metadata.model}): ${r.resul
     question: string,
     context?: string,
   ): Promise<AgentResponse> {
+    // Include project context and MCP tools if available
+    let fullContext = context || "None";
+    
+    if (this.projectContext) {
+      const contextString = await this.contextLoader.generateContextString();
+      fullContext = `${contextString}\n\nAdditional Context: ${context || "None"}`;
+    }
+
     const prompt = `You are Brady AI, an intelligent development orchestrator. You coordinate multiple AI models to help with development tasks. When users interact with you directly, respond as Brady.
 
 When you need to delegate tasks, you can say things like "Let me assign this to our UX Designer" and then report back with results like "UX Designer (Qwen via Groq) completed the task, here's the output."
 
-Context: ${context || "None"}
+Context: ${fullContext}
 
 Question: ${question}`;
     const directQuestionStep: OrchestrationStep = {
