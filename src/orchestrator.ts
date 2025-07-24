@@ -170,6 +170,8 @@ export class BradyAI {
 
   private async loadProjectContext() {
     try {
+      const packageJson = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '../package.json'), 'utf-8'));
+      console.log(`[BradyAI v${packageJson.version}] Starting in directory: ${process.cwd()}`);
       console.log('[BradyAI] Loading project context and discovering MCP tools...');
       this.projectContext = await this.contextLoader.loadProjectContext();
       
