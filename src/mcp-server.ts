@@ -20,7 +20,7 @@ export class MCPAIOrchestrator {
   private fileSystemManager: FileSystemManager;
 
   constructor(apiKeys: APIKeys) {
-    this.orchestrator = new BradyAI(apiKeys);
+    this.orchestrator = new BradyAI(apiKeys, process.cwd());
     this.fileSystemManager = new FileSystemManager(createFileSystemConfig());
     this.server = new Server(
       {

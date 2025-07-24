@@ -42,7 +42,7 @@ const apiKeys = {
       : undefined,
 };
 
-const brady = new BradyAI(apiKeys);
+const brady = new BradyAI(apiKeys, process.cwd());
 
 // OpenAI-compatible types
 interface ChatMessage {

@@ -33,7 +33,7 @@ const apiKeys = {
   openrouter: process.env.OPENROUTER_API_KEY,
 };
 
-const orchestrator = new BradyAI(apiKeys);
+const orchestrator = new BradyAI(apiKeys, process.cwd());
 
 // Health check endpoint
 app.get("/health", (req: Request, res: Response) => {

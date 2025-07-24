@@ -25,7 +25,7 @@ async function testOrchestrator() {
     process.exit(1);
   }
 
-  const orchestrator = new BradyAI(apiKeys);
+  const orchestrator = new BradyAI(apiKeys, process.cwd());
 
   // Test 1: Role Capabilities
   console.log("1️⃣ Testing role capabilities...");
