@@ -160,9 +160,9 @@ export class BradyAI {
     status: string;
   } | null = null;
 
-  constructor(apiKeys: APIKeys) {
+  constructor(apiKeys: APIKeys, workingDirectory?: string) {
     this.apiKeys = apiKeys;
-    this.contextLoader = new ContextLoader();
+    this.contextLoader = new ContextLoader(workingDirectory || process.cwd());
     this.loadConfig();
     this.initializeAgents();
     this.loadProjectContext();
