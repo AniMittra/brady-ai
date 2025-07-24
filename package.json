@@ -14,7 +14,10 @@
     "dev": "tsx src/openai-api-server.ts",
     "test": "tsx src/test.ts",
     "cli": "tsx src/cli.ts",
-    "install-cli": "npm run build && npm link"
+    "install-cli": "npm run build && npm link",
+    "update-global": "./update-brady-global.sh",
+    "build:global": "npm run build && npm run update-global",
+    "postversion": "npm run update-global"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
